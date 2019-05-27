@@ -1,5 +1,0 @@
-ext {
-    springBootVersion = "1.5.8.RELEASE"
-    springCloudVersion = "Edgware.RELEASE"
-}
-
