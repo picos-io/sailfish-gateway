@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: "mongodb://localhost:27017/sailfish"
+      repositories.enabled: false
+  redis:
+    host: localhost
+    port: 6379
+    repositories.enabled: false

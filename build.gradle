@@ -1,0 +1,31 @@
+apply from: 'gradle/dependency-management.gradle'
+
+allprojects {
+
+    apply plugin: 'idea'
+
+    group = 'com.shibgeek'
+
+    repositories {
+        mavenCentral()
+    }
+
+}
+
+subprojects {
+
+    apply plugin: 'java'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+
+    version "1.0.0-SNAPSHOT"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "http://nexus.talanlabs.com/content/repositories/releases/"
+        }
+    }
+
+}

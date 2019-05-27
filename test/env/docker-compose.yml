@@ -1,0 +1,14 @@
+version: '3'
+services:
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  eureka:
+    container_name: eureka
+    image: springcloud/eureka
+    ports:
+      - "8761:8761"

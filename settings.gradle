@@ -1,0 +1,7 @@
+rootProject.name = 'sailfish-gateway'
+include 'core'
+include 'impl'
+include 'actuator'
+include 'gateway'
+include 'test'
+

@@ -1,0 +1,19 @@
+server:
+  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: "mongodb://localhost:27017/sailfish"
+      repositories.enabled: false
+  redis:
+    host: localhost
+    port: 6379
+    repositories.enabled: false
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: "http://127.0.0.1:8761/eureka/"
