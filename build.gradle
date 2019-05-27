@@ -26,8 +26,8 @@ allprojects {
 
 subprojects {
 
-    apply plugin: "io.spring.dependency-management"
     apply plugin: 'java'
+    apply plugin: "io.spring.dependency-management"
 
     sourceCompatibility = JavaVersion.VERSION_1_8
 
