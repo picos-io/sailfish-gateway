@@ -1,0 +1,7 @@
+language: java
+
+notifications:
+  webhooks: https://hook.bearychat.com/=bwBrp/travis/93d020f67c0a20049466b93a0211692c
+
+script:
+  - ./gradlew clean build -x test

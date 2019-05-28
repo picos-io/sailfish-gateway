@@ -22,14 +22,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
     ElasticsearchRepositoriesAutoConfiguration.class
 })
 @EnableZuulProxy
+@EnableDiscoveryClient
 @EnableAsync
 @EnableConfigurationProperties(DefaultGatewayProperties.class)
 public class GatewayApplication {
-
-    @Profile("production")
-    @EnableDiscoveryClient
-    public class EurekaConfiguer {
-    }
 
     @Bean
     public GatewayZuulFilter gatewayZuulFilter() {

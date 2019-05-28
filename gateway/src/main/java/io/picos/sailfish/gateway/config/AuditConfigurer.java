@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
  */
 @Configuration
 @ConditionalOnProperty(prefix = "gateway", name = "auditEnabled", havingValue = "true", matchIfMissing = true)
-@ImportAutoConfiguration(ElasticsearchAutoConfiguration.class)
+@ImportAutoConfiguration({ElasticsearchAutoConfiguration.class, ElasticsearchRepositoriesAutoConfiguration.class})
 @EnableElasticsearchRepositories(basePackages = "io.picos.sailfish.gateway.impl.audit.repository")
 public class AuditConfigurer {
 

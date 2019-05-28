@@ -21,28 +21,11 @@ import org.springframework.http.MediaType;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.*;
+
 public class GatewayZuulFilter extends ZuulFilter {
 
     private static final Log logger = LogFactory.getLog(GatewayZuulFilter.class);
-
-    public final String[] ACTUATOR_URIS = new String[]
-        {"auditevents",//	显示当前应用程序的审计事件信息
-            "beans",//	显示应用Spring Beans的完整列表
-            "caches",//	显示可用缓存信息
-            "conditions",//	显示自动装配类的状态及及应用信息
-            "configprops",//	显示所有 @ConfigurationProperties 列表
-            "env",//	显示 ConfigurableEnvironment 中的属性
-            "flyway",//	显示 Flyway 数据库迁移信息
-            "health",//	显示应用的健康信息（未认证只显示status，认证显示全部信息详情）
-            "info",//	显示任意的应用信息（在资源文件写info.xxx即可）
-            "liquibase",//	展示Liquibase 数据库迁移
-            "metrics",//	展示当前应用的 metrics 信息
-            "mappings",//	显示所有 @RequestMapping 路径集列表
-            "scheduledtasks",//	显示应用程序中的计划任务
-            "sessions",//	允许从Spring会话支持的会话存储中检索和删除用户会话。
-            "shutdown",//	允许应用以优雅的方式关闭（默认情况下不启用）
-            "threaddump",//	执行一个线程dump
-            "httptrace"};
 
     @Autowired
     private GatewayProperties gatewayProperties;
@@ -55,12 +38,12 @@ public class GatewayZuulFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
-        return "pre";
+        return PRE_TYPE;
     }
 
     @Override
     public int filterOrder() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -69,20 +52,9 @@ public class GatewayZuulFilter extends ZuulFilter {
         final String uri = ctx.getRequest().getRequestURI();
 
         //ignore spring boot actuator
-        return !(uri.startsWith("/health") ||
-            uri.startsWith("/info") ||
-            uri.startsWith("/routes") ||
-            uri.startsWith("/status") ||
-            uri.startsWith("/actuator"));
+        return !(uri.startsWith("/health") || uri.startsWith("/info"));
     }
 
-    /**
-     * if shouldFilter() is true, this method will be invoked. this method is
-     * the core method of a ZuulFilter
-     *
-     * @return Some arbitrary artifact may be returned. Current implementation
-     * ignores it.
-     */
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
@@ -144,7 +116,6 @@ public class GatewayZuulFilter extends ZuulFilter {
 
             if (application.isJwtProtected() && application.getJwtOption() != null) {
                 //TODO JWT
-
             }
 
             if (logger.isDebugEnabled()) {
@@ -179,27 +150,27 @@ public class GatewayZuulFilter extends ZuulFilter {
     }
 
     private String getXForwardedUserid(Application application) {
-        Header xForwared = application.getHeader();
-        if (xForwared == null) {
+        Header header = application.getHeader();
+        if (header == null) {
             return gatewayProperties.getHttpHeaderUserId();
         }
-        String xForwaredUserid = xForwared.getUserIdKey();
-        if (StringUtils.isEmpty(xForwaredUserid)) {
+        String userIdKey = header.getUserIdKey();
+        if (StringUtils.isEmpty(userIdKey)) {
             return gatewayProperties.getHttpHeaderUserId();
         }
-        return xForwaredUserid;
+        return userIdKey;
     }
 
     private String getXForwardedUsername(Application application) {
-        Header xForwared = application.getHeader();
-        if (xForwared == null) {
+        Header header = application.getHeader();
+        if (header == null) {
             return gatewayProperties.getHttpHeaderUserName();
         }
-        String xForwaredUsername = xForwared.getUserNameKey();
-        if (StringUtils.isEmpty(xForwaredUsername)) {
+        String userNameKey = header.getUserNameKey();
+        if (StringUtils.isEmpty(userNameKey)) {
             return gatewayProperties.getHttpHeaderUserName();
         }
-        return xForwaredUsername;
+        return userNameKey;
     }
 
 }

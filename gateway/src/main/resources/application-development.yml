@@ -1,8 +1,21 @@
 server:
-  port: 8081
+  port: 8080
+
+info:
+  app:
+    version: ${GATEWAY_VERSION:dev-snapshot}
+
+gateway:
+  version: ${GATEWAY_VERSION:dev-snapshot}
 
 spring:
   data:
+    elasticsearch:
+      clustername: sailfish
+      properties:
+        host: localhost
+        port: 9300
+        poll: 60000ms
     mongodb:
       uri: "mongodb://localhost:27017/sailfish"
       repositories.enabled: false
@@ -10,3 +23,19 @@ spring:
     host: localhost
     port: 6379
     repositories.enabled: false
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: "http://127.0.0.1:8761/eureka/"
+
+hystrix.command.default.execution.timeout.enabled: false
+
+logging:
+  level:
+    com.netflix.zuul: DEBUG
