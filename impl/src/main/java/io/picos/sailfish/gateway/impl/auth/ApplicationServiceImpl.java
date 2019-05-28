@@ -1,7 +1,7 @@
 package io.picos.sailfish.gateway.impl.auth;
 
 import io.picos.sailfish.gateway.auth.ApplicationService;
-import io.picos.sailfish.gateway.impl.mongodb.repository.ApplicationRepository;
+import io.picos.sailfish.gateway.impl.auth.repository.ApplicationRepository;
 import io.picos.sailfish.gateway.model.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

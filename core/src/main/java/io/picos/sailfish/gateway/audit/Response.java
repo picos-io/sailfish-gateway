@@ -2,16 +2,16 @@ package io.picos.sailfish.gateway.audit;
 
 public class Response {
 
-    int status;
+    int httpStatus;
 
     String body;
 
-    public int getStatus() {
-        return status;
+    public int getHttpStatus() {
+        return httpStatus;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setHttpStatus(int httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     public String getBody() {

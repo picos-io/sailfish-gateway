@@ -1,4 +1,4 @@
-package io.picos.sailfish.gateway.impl.mongodb.model;
+package io.picos.sailfish.gateway.impl.auth.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;

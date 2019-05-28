@@ -3,6 +3,12 @@ server:
 
 spring:
   data:
+    elasticsearch:
+      clustername: sailfish
+      properties:
+        host: localhost
+        port: 9300
+        poll: 60000ms
     mongodb:
       uri: "mongodb://localhost:27017/sailfish"
       repositories.enabled: false
@@ -10,6 +16,9 @@ spring:
     host: localhost
     port: 6379
     repositories.enabled: false
+  sleuth:
+    sampler:
+      percentage: 1.0
 
 eureka:
   client:
@@ -17,3 +26,5 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: "http://127.0.0.1:8761/eureka/"
+
+hystrix.command.default.execution.timeout.enabled: false

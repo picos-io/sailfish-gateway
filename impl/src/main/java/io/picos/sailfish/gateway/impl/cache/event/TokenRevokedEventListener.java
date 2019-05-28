@@ -5,6 +5,9 @@ import io.picos.sailfish.gateway.impl.cache.event.TokenRevokedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 
+/**
+ * @author dz
+ */
 public class TokenRevokedEventListener {
 
     @Autowired

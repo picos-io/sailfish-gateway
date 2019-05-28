@@ -1,4 +1,4 @@
-package io.picos.sailfish.gateway.impl.mongodb.model;
+package io.picos.sailfish.gateway.impl.auth.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,7 +23,7 @@ public class Application implements io.picos.sailfish.gateway.model.Application 
 
     private ApplicationJwtOption jwtOption;
 
-    private ApplicationForwarded forwarded;
+    private ApplicationHeader header;
 
     public String getId() {
         return id;
@@ -79,11 +79,11 @@ public class Application implements io.picos.sailfish.gateway.model.Application 
     }
 
     @Override
-    public ApplicationForwarded getForwarded() {
-        return forwarded;
+    public ApplicationHeader getHeader() {
+        return header;
     }
 
-    public void setForwarded(ApplicationForwarded forwarded) {
-        this.forwarded = forwarded;
+    public void setHeader(ApplicationHeader header) {
+        this.header = header;
     }
 }

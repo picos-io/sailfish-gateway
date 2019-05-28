@@ -12,9 +12,9 @@ public class DefaultGatewayProperties implements GatewayProperties {
 
     private boolean auditEnabled = false;
 
-    private String xForwardedUserid = "X-Forwarded-Userid";
+    private String httpHeaderUserId = "X-User-Id";
 
-    private String xForwardedUsername = "X-Forwarded-Username";
+    private String httpHeaderUserName = "X-User-Name";
 
     private String oauth2CheckTokenUrl = "http://oauth2/oauth/check_token";
 
@@ -62,21 +62,21 @@ public class DefaultGatewayProperties implements GatewayProperties {
     }
 
     @Override
-    public String getXForwardedUserid() {
-        return xForwardedUserid;
+    public String getHttpHeaderUserId() {
+        return httpHeaderUserId;
     }
 
-    public void setXForwardedUserid(String xForwardedUserid) {
-        this.xForwardedUserid = xForwardedUserid;
+    public void setHttpHeaderUserId(String httpHeaderUserId) {
+        this.httpHeaderUserId = httpHeaderUserId;
     }
 
     @Override
-    public String getXForwardedUsername() {
-        return xForwardedUsername;
+    public String getHttpHeaderUserName() {
+        return httpHeaderUserName;
     }
 
-    public void setXForwardedUsername(String xForwardedUsername) {
-        this.xForwardedUsername = xForwardedUsername;
+    public void setHttpHeaderUserName(String httpHeaderUserName) {
+        this.httpHeaderUserName = httpHeaderUserName;
     }
 
     @Override

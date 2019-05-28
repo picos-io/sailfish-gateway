@@ -5,8 +5,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-redis"
+    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 
-    compile "org.springframework.security.oauth:spring-security-oauth2:2.0.8.RELEASE"
+    compile "org.springframework.security.oauth:spring-security-oauth2:2.3.5.RELEASE"
 
     compile project(":core")
 }

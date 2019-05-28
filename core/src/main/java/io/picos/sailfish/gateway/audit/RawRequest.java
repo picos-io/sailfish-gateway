@@ -7,7 +7,7 @@ public class RawRequest {
 
     String method;
     String url;
-    String client;
+    String requestFrom;
     Date requestAt;
     List<String> headers;
     List<String> params;
@@ -29,12 +29,12 @@ public class RawRequest {
         this.url = url;
     }
 
-    public String getClient() {
-        return client;
+    public String getRequestFrom() {
+        return requestFrom;
     }
 
-    public void setClient(String client) {
-        this.client = client;
+    public void setRequestFrom(String requestFrom) {
+        this.requestFrom = requestFrom;
     }
 
     public Date getRequestAt() {

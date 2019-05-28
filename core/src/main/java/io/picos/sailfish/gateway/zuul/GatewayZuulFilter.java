@@ -8,7 +8,7 @@ import io.picos.sailfish.gateway.exception.ApplicationDisabledException;
 import io.picos.sailfish.gateway.exception.ApplicationNotFoundException;
 import io.picos.sailfish.gateway.exception.AuthorizationHeaderRequiredException;
 import io.picos.sailfish.gateway.model.Application;
-import io.picos.sailfish.gateway.model.Forwarded;
+import io.picos.sailfish.gateway.model.Header;
 import io.picos.sailfish.gateway.model.User;
 import io.picos.sailfish.gateway.support.GatewayProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ public class GatewayZuulFilter extends ZuulFilter {
 
     private static final Log logger = LogFactory.getLog(GatewayZuulFilter.class);
 
-    public final String[] ACTUATOR_FETURE_URI = new String[]
+    public final String[] ACTUATOR_URIS = new String[]
         {"auditevents",//	显示当前应用程序的审计事件信息
             "beans",//	显示应用Spring Beans的完整列表
             "caches",//	显示可用缓存信息
@@ -42,7 +42,7 @@ public class GatewayZuulFilter extends ZuulFilter {
             "sessions",//	允许从Spring会话支持的会话存储中检索和删除用户会话。
             "shutdown",//	允许应用以优雅的方式关闭（默认情况下不启用）
             "threaddump",//	执行一个线程dump
-            "ttptrace"};
+            "httptrace"};
 
     @Autowired
     private GatewayProperties gatewayProperties;
@@ -72,6 +72,7 @@ public class GatewayZuulFilter extends ZuulFilter {
         return !(uri.startsWith("/health") ||
             uri.startsWith("/info") ||
             uri.startsWith("/routes") ||
+            uri.startsWith("/status") ||
             uri.startsWith("/actuator"));
     }
 
@@ -178,25 +179,25 @@ public class GatewayZuulFilter extends ZuulFilter {
     }
 
     private String getXForwardedUserid(Application application) {
-        Forwarded xForwared = application.getForwarded();
+        Header xForwared = application.getHeader();
         if (xForwared == null) {
-            return gatewayProperties.getXForwardedUserid();
+            return gatewayProperties.getHttpHeaderUserId();
         }
         String xForwaredUserid = xForwared.getUserIdKey();
         if (StringUtils.isEmpty(xForwaredUserid)) {
-            return gatewayProperties.getXForwardedUserid();
+            return gatewayProperties.getHttpHeaderUserId();
         }
         return xForwaredUserid;
     }
 
     private String getXForwardedUsername(Application application) {
-        Forwarded xForwared = application.getForwarded();
+        Header xForwared = application.getHeader();
         if (xForwared == null) {
-            return gatewayProperties.getXForwardedUsername();
+            return gatewayProperties.getHttpHeaderUserName();
         }
-        String xForwaredUsername = xForwared.getUsernameKey();
+        String xForwaredUsername = xForwared.getUserNameKey();
         if (StringUtils.isEmpty(xForwaredUsername)) {
-            return gatewayProperties.getXForwardedUsername();
+            return gatewayProperties.getHttpHeaderUserName();
         }
         return xForwaredUsername;
     }

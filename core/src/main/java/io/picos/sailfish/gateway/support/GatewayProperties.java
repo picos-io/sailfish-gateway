@@ -8,9 +8,9 @@ public interface GatewayProperties {
 
     boolean isAuditEnabled();
 
-    String getXForwardedUserid();
+    String getHttpHeaderUserId();
 
-    String getXForwardedUsername();
+    String getHttpHeaderUserName();
 
     String getOauth2CheckTokenUrl();
 

@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author dz
+ */
 @Service("authzService")
 public class AuthzServiceImpl implements AuthzService {
 

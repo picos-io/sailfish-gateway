@@ -8,7 +8,9 @@ import io.picos.sailfish.gateway.impl.cache.message.TokenRevokedMessageListener;
 import io.picos.sailfish.gateway.impl.cache.message.UserChangedMessageListener;
 import io.picos.sailfish.gateway.impl.support.DefaultGatewayProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 @Configuration
 @EnableCaching
+@ImportAutoConfiguration(RedisAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "gateway", name = "cacheEnabled", havingValue = "true", matchIfMissing = true)
 public class RedisConfigurer {
 

@@ -1,8 +1,11 @@
-package io.picos.sailfish.gateway.impl.mongodb.repository;
+package io.picos.sailfish.gateway.impl.auth.repository;
 
-import io.picos.sailfish.gateway.impl.mongodb.model.User;
+import io.picos.sailfish.gateway.impl.auth.model.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+/**
+ * @author dz
+ */
 public interface RoleRepository extends PagingAndSortingRepository<User, String> {
 
     User findByUsername(String username);

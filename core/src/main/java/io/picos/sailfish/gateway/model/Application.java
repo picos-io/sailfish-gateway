@@ -12,6 +12,6 @@ public interface Application {
 
     JwtOption getJwtOption();
 
-    Forwarded getForwarded();
+    Header getHeader();
 
 }

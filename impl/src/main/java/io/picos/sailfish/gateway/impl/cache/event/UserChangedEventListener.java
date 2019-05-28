@@ -7,6 +7,9 @@ import io.picos.sailfish.gateway.message.UserChanged;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 
+/**
+ * @author dz
+ */
 public class UserChangedEventListener {
 
     @Autowired

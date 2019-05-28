@@ -1,5 +1,8 @@
 package io.picos.sailfish.gateway.impl.cache;
 
+/**
+ * @author dz
+ */
 public class CacheConstants {
 
     public static final String TOKEN_CACHE = "gateway_token_cache";

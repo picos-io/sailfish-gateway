@@ -16,6 +16,13 @@ gateway:
   userChangedChannel: ${GATEWAY_USER_CHANGED_CHANNEL:cip_user_changed}
 
 spring:
+  data:
+    redis:
+      repositories:
+        enabled: false
+    elasticsearch:
+      repositories:
+        enabled: false
   profiles:
     active: production
 

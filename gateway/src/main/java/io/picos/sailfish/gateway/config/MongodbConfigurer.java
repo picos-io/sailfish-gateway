@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @EnableMongoAuditing
-@EnableMongoRepositories(basePackages = "io.picos.sailfish.gateway.impl.mongodb")
+@EnableMongoRepositories(basePackages = "io.picos.sailfish.gateway.impl.auth.repository")
 public class MongodbConfigurer {
 
 }

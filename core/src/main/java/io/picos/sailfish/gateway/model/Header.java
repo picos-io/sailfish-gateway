@@ -1,9 +1,9 @@
 package io.picos.sailfish.gateway.model;
 
-public interface Forwarded {
+public interface Header {
 
     String getUserIdKey();
 
-    String getUsernameKey();
+    String getUserNameKey();
 
 }

@@ -2,8 +2,8 @@ package io.picos.sailfish.gateway.impl.auth;
 
 import io.picos.sailfish.gateway.auth.IamService;
 import io.picos.sailfish.gateway.impl.cache.CacheConstants;
-import io.picos.sailfish.gateway.impl.mongodb.repository.ApiPermissionRepository;
-import io.picos.sailfish.gateway.impl.mongodb.repository.UserRepository;
+import io.picos.sailfish.gateway.impl.auth.repository.ApiPermissionRepository;
+import io.picos.sailfish.gateway.impl.auth.repository.UserRepository;
 import io.picos.sailfish.gateway.model.ApiPermission;
 import io.picos.sailfish.gateway.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class IamServiceImpl implements IamService {
             return Collections.emptyList();
         }
 
-        io.picos.sailfish.gateway.impl.mongodb.model.User user = userRepository.findByUsername(username);
+        io.picos.sailfish.gateway.impl.auth.model.User user = userRepository.findByUsername(username);
         if (user == null) {
             return Collections.emptyList();
         }

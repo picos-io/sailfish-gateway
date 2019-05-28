@@ -1,12 +1,12 @@
-package io.picos.sailfish.gateway.impl.mongodb.model;
+package io.picos.sailfish.gateway.impl.auth.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 
-@Document(collection = "IamGroups")
-public class Group {
+@Document(collection = "IamRoles")
+public class Role {
 
     @Id
     private String id;

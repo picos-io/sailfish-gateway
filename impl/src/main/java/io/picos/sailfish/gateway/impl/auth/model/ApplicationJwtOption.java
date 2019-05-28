@@ -1,16 +1,16 @@
-package io.picos.sailfish.gateway.impl.mongodb.model;
+package io.picos.sailfish.gateway.impl.auth.model;
 
 import io.picos.sailfish.gateway.model.JwtOption;
 
 public class ApplicationJwtOption implements JwtOption {
 
-    String algorithm;
+    private String algorithm;
 
-    String secret;
+    private String secret;
 
-    String issuer;
+    private String issuer;
 
-    String audience;
+    private String audience;
 
     @Override
     public String getAlgorithm() {

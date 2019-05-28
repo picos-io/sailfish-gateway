@@ -9,11 +9,14 @@ gateway:
   oauth2CheckTokenUrl: ${OAUTH2_CHECK_TOKEN_URL:http://oauth2/oauth/check_token}
   oauth2ClientId: ${OAUTH2_CLIENT_ID:gateway}
   oauth2ClientSecret: ${OAUTH2_CLIENT_SECRET:gateway-secret}
-  enableAuthorize: ${GATEWAY_ENABLE_AUTHORIZE:true}
-  enableCors: ${GATEWAY_ENABLE_CORS:false}
+  oauth2ResourceId: ${OAUTH2_RESOURCE_ID:gateway}
+  auditEnabled: ${GATEWAY_AUDIT_ENABLED:false}
+  cacheEnabled: ${GATEWAY_CACHE_ENABLED:true}
+  corsEnabled: ${GATEWAY_CORS_ENABLED:false}
   corsAllowedOrigin: ${GATEWAY_CORS_ALLOWED_ORIGIN:*}
-  tokenChangedChannel: ${GATEWAY_TOKEN_CHANGED_CHANNEL:cip_token_changed}
-  userChangedChannel: ${GATEWAY_USER_CHANGED_CHANNEL:cip_user_changed}
+  corsAllowedMethod: ${GATEWAY_CORS_ALLOWED_METHOD:*}
+  tokenChangedChannel: ${GATEWAY_TOKEN_REVOKED_CHANNEL:sailfish_token_revoked}
+  userChangedChannel: ${GATEWAY_USER_CHANGED_CHANNEL:sailfish_user_changed}
 
 spring:
   profiles:

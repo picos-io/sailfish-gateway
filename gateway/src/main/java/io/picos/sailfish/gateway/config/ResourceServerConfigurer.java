@@ -18,11 +18,6 @@ public class ResourceServerConfigurer extends ResourceServerConfigurerAdapter {
     @Autowired
     private DefaultGatewayProperties gatewayProperties;
 
-    @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId(gatewayProperties.getOauth2ResourceId());
-    }
-
     @Bean
     public ResourceServerTokenServices tokenService() {
         RemoteTokenServices tokenServices = new RemoteTokenServices();
@@ -33,13 +28,18 @@ public class ResourceServerConfigurer extends ResourceServerConfigurerAdapter {
     }
 
     @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        resources.resourceId(gatewayProperties.getOauth2ResourceId());
+    }
+
+    @Override
     public void configure(final HttpSecurity http) throws Exception {
         http
             .requestMatchers()
             .antMatchers("/**")
             .and()
             .authorizeRequests()
-            .antMatchers("/", "/actuator", "/info", "/health")
+            .antMatchers("/", "/actuator", "/info", "/health", "/status")
             .permitAll()
             .anyRequest()
             .authenticated();
