@@ -31,7 +31,7 @@ public class GatewayTestApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(GatewayApplication.class, args);
+        SpringApplication.run(GatewayTestApplication.class, args);
     }
 
 }
