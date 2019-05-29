@@ -1,20 +1,30 @@
-FROM soterianetworks/devops:jre_images
+FROM clouthinkin/jdk as builder
 
-LABEL maintainer "developer@soterianetworks.com"
+LABEL maintainer="melthaw@gmail.com"
 
-ADD shared/etc/nginx/conf.d/gateway/ /etc/nginx/conf.d/gateway/
-ADD shared/usr/share/cip/gateway/ /usr/share/cip/gateway/
-ADD shared/scripts/docker-entrypoint.sh /
+RUN mkdir -p /code
 
-ADD gateway/build/libs/gateway-1.0.0-SNAPSHOT.jar /gateway-1.0.0-SNAPSHOT.jar
+ADD . /code
+
+WORKDIR /code
+
+RUN cd /code && chmod +x gradlew && ./gradlew clean build -x test
+
+# final stage
+FROM clouthinkin/jre
+
+LABEL maintainer="melthaw@gmail.com"
+
+COPY src/docker/docker-entrypoint.sh /
+
+COPY --from=builder /code/build/libs/gateway-1.0.0-SNAPSHOT.jar /gateway-1.0.0-SNAPSHOT.jar
 
 RUN chmod +x /*.sh
 
-VOLUME ["/usr/share/cip/gateway","/etc/nginx/conf.d/gateway"]
+EXPOSE 80
 
 WORKDIR /
 ENTRYPOINT /docker-entrypoint.sh
 
-#TODO: use jq to parse Spring Actuator's Health
-HEALTHCHECK --interval=30s --timeout=3s --retries=6 \
-            CMD curl -f http://localhost/health || exit 1
+HEALTHCHECK --interval=15s --timeout=6s --retries=12 \
+            CMD nc -v -z -w 3 localhost 80 || exit 1
