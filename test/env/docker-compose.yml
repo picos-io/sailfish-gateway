@@ -20,7 +20,7 @@ services:
     ports:
       - "27017:27017"
 
-  eureka:
+  registry:
     container_name: eureka
     image: springcloud/eureka
     ports:
@@ -29,6 +29,10 @@ services:
   helloworld:
     container_name: helloworld
     image: clouthinkin/helloworld:eureka
+    depends_on:
+      - registry
+    ports:
+      - "8888:80"
     environment:
-      EUREKA_INSTANCE_HOST: efactory
-      EUREKA_DEFAULT_SERVICE_URL: 'http://registry/eureka/'
+      EUREKA_INSTANCE_HOST: helloworld
+      EUREKA_DEFAULT_SERVICE_URL: 'http://registry:8761/eureka/'
