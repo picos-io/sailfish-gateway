@@ -10,9 +10,9 @@ public interface AuthzService {
      * @param token
      * @param application
      * @param httpMethod
-     * @param requestUrl
+     * @param requestUri
      * @return
      */
-    User authorize(String token, String application, String httpMethod, String requestUrl);
+    User authorize(String token, String application, String httpMethod, String requestUri);
 
 }

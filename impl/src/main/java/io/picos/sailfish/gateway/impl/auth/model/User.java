@@ -5,9 +5,10 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "IamUsers")
+@Document(collection = "users")
 public class User implements io.picos.sailfish.gateway.model.User {
 
     @Id
@@ -17,10 +18,10 @@ public class User implements io.picos.sailfish.gateway.model.User {
     private String username;
 
     @DBRef
-    private List<Group> groups;
+    private List<Group> groups = new ArrayList<>();
 
     @DBRef
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     @Override
     public String getId() {

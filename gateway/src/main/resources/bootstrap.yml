@@ -6,6 +6,7 @@ logging:
   file: ${LOG_FILE:gateway.log}
   level:
     root: ${LOG_LEVEL_ROOT:INFO}
-#    com.netflix: ${LOG_LEVEL_NETFLIX:WARN}
-    com.netflix: DEBUG
+    com.netflix: ${LOG_LEVEL_NETFLIX:WARN}
     io.picos: ${LOG_LEVEL_APP:DEBUG}
+  maxFileSize: ${LOG_MAX_FILE_SIZE:10}
+  totalSizeCap: ${LOG_TOTAL_SIZE_CAP:100}

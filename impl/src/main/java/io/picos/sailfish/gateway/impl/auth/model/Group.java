@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 
-@Document(collection = "IamGroups")
+@Document(collection = "groups")
 public class Group {
 
     @Id

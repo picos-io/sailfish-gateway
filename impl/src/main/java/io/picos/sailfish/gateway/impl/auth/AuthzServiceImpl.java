@@ -41,7 +41,7 @@ public class AuthzServiceImpl implements AuthzService {
     }
 
     @Override
-    public User authorize(String token, String application, String httpMethod, String requestUrl) {
+    public User authorize(String token, String application, String httpMethod, String requestUri) {
         final String username = loadUsernameByAccessToken(token);
         final User user = iamService.findUserByName(username);
         if (user == null) {
@@ -55,13 +55,13 @@ public class AuthzServiceImpl implements AuthzService {
                                        .anyMatch(permission -> isApiAllowed(permission,
                                                                             application,
                                                                             httpMethod,
-                                                                            requestUrl));
+                                                                            requestUri));
 
         if (!isAllowed) {
             throw new HasNoPermissionException(String.format("%s has no permission to %s %s",
                                                              username,
                                                              httpMethod,
-                                                             requestUrl));
+                                                             requestUri));
         }
 
         return user;

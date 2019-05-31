@@ -1,0 +1,71 @@
+<mongoChangeLog>
+    <changeSet changeId="add-roles" author="dz">
+        <script>
+            var role = {
+            "code" : "ROLE_TEST",
+            "name":"ROLE_TEST"
+            };
+            db.roles.save(role);
+        </script>
+    </changeSet>
+    <changeSet changeId="add-users" author="dz">
+        <script>
+            var role = db.roles.findOne({"code" : "ROLE_TEST"})
+
+            db.users.save({
+            "username" : "administrator",
+            "displayName":"administrator",
+            "password" : "$2a$10$IOngSQjUJgLZD25rBMIjUuA00s.9m3h1u/LewPBDoEM27G5yNwP7m",
+            "expired":false,
+            "locked":false,
+            "enabled":true,
+            "groups":[],
+            "roles":[new DBRef('roles',role._id)]
+            });
+            db.users.save({
+            "username" : "demouser",
+            "displayName":"demouser",
+            "password" : "$2a$10$IOngSQjUJgLZD25rBMIjUuA00s.9m3h1u/LewPBDoEM27G5yNwP7m",
+            "expired":false,
+            "locked":false,
+            "enabled":true,
+            "groups":[],
+            "roles":[new DBRef('roles',role._id)]
+            });
+        </script>
+    </changeSet>
+    <changeSet changeId="add-oauth2-clients" author="dz">
+        <script>
+            db.oauth2Clients.insert({
+            "clientId" : "gateway",
+            "clientSecret": "$2a$10$9ev6ucvQ9dUkTuz9eQyJCuI9CzdMg1LpUGB4xQhW9WcrhhifM2bHa",
+            "authorizedGrantTypes": "authorization_code,implicit,refresh_token,password",
+            "scope":["*"],
+            "authorities":[]
+            });
+        </script>
+    </changeSet>
+    <changeSet changeId="add-applications" author="dz">
+        <script>
+            db.applications.insert({
+            "code" : "helloworld",
+            "name": "helloworld",
+            "enabled": true
+            });
+        </script>
+    </changeSet>
+    <changeSet changeId="add-api-permissions" author="dz">
+        <script>
+            var role = db.roles.findOne({"code" : "ROLE_TEST"})
+            var application = db.applications.findOne({"code" : "helloworld"})
+
+            db.apiPermissions.insert({
+            "application" : application.code,
+            "method": "GET",
+            "apiUri": "/foo",
+            "roles":[new DBRef('roles',role._id)]
+            });
+        </script>
+    </changeSet>
+
+</mongoChangeLog>

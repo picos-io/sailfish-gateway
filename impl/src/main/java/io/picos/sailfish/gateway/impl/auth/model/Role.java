@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 
-@Document(collection = "IamRoles")
+@Document(collection = "roles")
 public class Role {
 
     @Id
@@ -40,4 +40,5 @@ public class Role {
     public void setName(String name) {
         this.name = name;
     }
+
 }

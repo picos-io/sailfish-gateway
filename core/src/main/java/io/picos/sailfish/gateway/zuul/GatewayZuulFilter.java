@@ -58,11 +58,11 @@ public class GatewayZuulFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        final String requestURI = ctx.getRequest().getRequestURI();
+        final String requestUri = ctx.getRequest().getRequestURI();
         final String requestMethod = ctx.getRequest().getMethod();
 
         //resolveApplication
-        final String applicationCode = StringUtils.split(requestURI, "/")[0];
+        final String applicationCode = StringUtils.split(requestUri, "/")[0];
         Application application = applicationService.findByCode(applicationCode);
         if (application == null) {
             throw new ApplicationNotFoundException(String.format("Unsupported application '%s'", applicationCode));
@@ -85,7 +85,7 @@ public class GatewayZuulFilter extends ZuulFilter {
         final String accessToken = authorizationHeader.substring(authorizationHeader.lastIndexOf(" ") + 1);
 
         try {
-            final User user = authzService.authorize(accessToken, applicationCode, requestMethod, requestURI);
+            final User user = authzService.authorize(accessToken, applicationCode, requestMethod, requestUri);
             ctx.setSendZuulResponse(true);
 
             try {
@@ -123,22 +123,22 @@ public class GatewayZuulFilter extends ZuulFilter {
                                            user.getUsername(),
                                            applicationCode,
                                            requestMethod,
-                                           requestURI));
+                                           requestUri));
             }
 
         } catch (Throwable e) {
             logger.error(String.format("Authorizing [token=%s, method=%s, requestUri=%s] goes failure, the reason is %s",
-                                       requestMethod,
-                                       requestURI,
                                        accessToken,
-                                       e.getMessage()));
+                                       requestMethod,
+                                       requestUri,
+                                       e.getMessage()), e);
 
             ctx.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
             if (null == ctx.getResponseBody()) {
                 final String errMsg =
                     String.format("{\"method\": \"%s\",\"requestUri\": \"%s\",\"errorMessage\": \"%s\"}",
                                   requestMethod,
-                                  requestURI,
+                                  requestUri,
                                   e.getMessage());
                 ctx.setResponseBody(errMsg);
                 ctx.getResponse()

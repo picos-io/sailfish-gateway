@@ -4,9 +4,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-@Document(collection = "Applications")
-public class Application implements io.picos.sailfish.gateway.model.Application {
+@Document(collection = "applications")
+public class Application implements io.picos.sailfish.gateway.model.Application, Serializable {
 
     @Id
     private String id;

@@ -3,10 +3,11 @@ server:
 
 info:
   app:
-    version: ${GATEWAY_VERSION:dev-snapshot}
+    version: dev-snapshot
 
 gateway:
-  version: ${GATEWAY_VERSION:dev-snapshot}
+  version: dev-snapshot
+  oauth2CheckTokenUrl: http://127.0.0.1:9999/oauth/check_token
 
 spring:
   data:

@@ -25,4 +25,5 @@ public class ApplicationHeader implements Header {
     public void setUserNameKey(String userNameKey) {
         this.userNameKey = userNameKey;
     }
+
 }

@@ -20,6 +20,18 @@ services:
     ports:
       - "27017:27017"
 
+  mongoseed:
+    container_name: mongoseed
+    image: picosio/sailfish-mongo-seed
+    depends_on:
+      - mongodb
+    volumes:
+      - "./db:/var/db"
+    environment:
+      MONGODB_URI: "mongodb://mongodb:27017/sailfish"
+      MOOGEEZ_LOCATION: "file:/var/db/mongeez.xml"
+      JAVA_OPTS: "-Dspring.profiles.active=without-credentials"
+
   registry:
     container_name: eureka
     image: springcloud/eureka
@@ -34,5 +46,40 @@ services:
     ports:
       - "8888:80"
     environment:
-      EUREKA_INSTANCE_HOST: helloworld
+      EUREKA_INSTANCE_HOST: localhost
+      EUREKA_INSTANCE_PORT: 8888
       EUREKA_DEFAULT_SERVICE_URL: 'http://registry:8761/eureka/'
+
+  oauth2:
+    container_name: oauth2
+    image: picosio/sailfish-oauth2
+    depends_on:
+      - redis
+      - mongodb
+    ports:
+      - "9999:80"
+    environment:
+      MONGODB_URI: "mongodb://mongodb:27017/sailfish"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JAVA_OPTS: "-Dspring.profiles.active=without-credentials"
+
+#  gateway:
+#    container_name: gateway
+#    build:
+#      context: .
+#      dockerfile: gradle/Dockerfile
+#    ports:
+#      - "8080:80"
+#      - "8191:8191"
+#    volumes:
+#      - ../../:/home/gradle/test
+#      - ~/.m2:/home/gradle/.m2
+#      - ~/.gradle:/home/gradle/.gradle
+#    command: bash -c "cd /home/gradle/test/gateway && gradle clean bootRun -PjvmArgs='-Dspring.profiles.active=without-credentials'"
+#    environment:
+#      MONGODB_URI: "mongodb://mongodb:27017/sailfish"
+#      REDIS_HOST: redis
+#      REDIS_PORT: 6379
+#      EUREKA_DEFAULT_SERVICE_URL: http://registry:8761/eureka/
+#      GRADLE_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8191"

@@ -5,13 +5,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.List;
 
-@Document(collection = "ApiPermissions")
-public class ApiPermission implements io.picos.sailfish.gateway.model.ApiPermission {
+@Document(collection = "apiPermissions")
+public class ApiPermission implements io.picos.sailfish.gateway.model.ApiPermission, Serializable {
 
     @Id
     private String id;
+
+    //redundancy field to store the application's code
+    private String application;
 
     private String method;
 
@@ -28,7 +32,16 @@ public class ApiPermission implements io.picos.sailfish.gateway.model.ApiPermiss
         this.id = id;
     }
 
-    @Autowired
+    @Override
+    public String getApplication() {
+        return application;
+    }
+
+    public void setApplication(String application) {
+        this.application = application;
+    }
+
+    @Override
     public String getMethod() {
         return method;
     }
@@ -37,7 +50,7 @@ public class ApiPermission implements io.picos.sailfish.gateway.model.ApiPermiss
         this.method = method;
     }
 
-    @Autowired
+    @Override
     public String getApiUri() {
         return apiUri;
     }
