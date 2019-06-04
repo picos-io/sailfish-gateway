@@ -12,7 +12,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,19 +29,33 @@ public class AuthzServiceImpl implements AuthzService {
 
     private static final Log logger = LogFactory.getLog(AuthzServiceImpl.class);
 
-    @Autowired
-    private ResourceServerTokenServices tokenServices;
 
     @Autowired
     private IamService iamService;
 
-    @Cacheable(value = CacheConstants.TOKEN_CACHE, key = "#token")
+    @Autowired
+    private TokenStore tokenStore;
+
     public String loadUsernameByAccessToken(String token) {
-        final Authentication authentication = tokenServices.loadAuthentication(token);
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Resolve token '%s' to authentication '%s'", token, authentication));
+        final OAuth2Authentication auth2Authentication = tokenStore.readAuthentication(token);
+        if (auth2Authentication == null) {
+            logger.warn(String.format("Not found the oauth2 authentication for token %s", token));
+            throw new InvalidTokenException(token);
         }
-        return (String) authentication.getPrincipal();
+        final Authentication authentication = auth2Authentication.getUserAuthentication();
+        if (authentication == null) {
+            logger.warn(String.format("Not found the authentication for token %s", token));
+            throw new InvalidTokenException(token);
+        }
+        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        if (userDetails == null) {
+            logger.warn(String.format("Not found the user for token %s", token));
+            throw new InvalidTokenException(token);
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Resolve token '%s' to authentication '%s'", token, userDetails.getUsername()));
+        }
+        return userDetails.getUsername();
     }
 
     @Override

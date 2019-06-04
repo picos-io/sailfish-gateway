@@ -27,6 +27,15 @@ gateway:
   tokenChangedChannel: ${GATEWAY_TOKEN_REVOKED_CHANNEL:sailfish_token_revoked}
   userChangedChannel: ${GATEWAY_USER_CHANGED_CHANNEL:sailfish_user_changed}
 
+zuul:
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 10000
+
+hystrix.command.default.execution.timeout.enabled: false
+#hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+hystrix.threadpool.default.coreSize: 100
+
 spring:
   profiles:
     active: production

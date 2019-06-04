@@ -20,8 +20,6 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 @Configuration
-@EnableCaching
-@ImportAutoConfiguration({RedisAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class,})
 @ConditionalOnProperty(prefix = "gateway", name = "cacheEnabled", havingValue = "true", matchIfMissing = true)
 public class CacheConfigurer {
 

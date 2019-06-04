@@ -16,8 +16,7 @@ import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class,
-    RedisRepositoriesAutoConfiguration.class,
+@SpringBootApplication(exclude = {
     ElasticsearchAutoConfiguration.class,
     ElasticsearchRepositoriesAutoConfiguration.class
 })

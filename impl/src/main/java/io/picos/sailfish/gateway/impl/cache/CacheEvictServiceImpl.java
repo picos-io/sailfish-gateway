@@ -60,6 +60,9 @@ public class CacheEvictServiceImpl implements CacheEvictService, InitializingBea
 
     @Override
     public void afterPropertiesSet() {
+        if (cacheManager == null) {
+            return;
+        }
         //always clear the cache after restart
         Cache cache = cacheManager.getCache(CacheConstants.USER_CACHE);
         if (cache != null) {
