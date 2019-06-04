@@ -15,9 +15,9 @@ FROM clouthinkin/jre
 
 LABEL maintainer="melthaw@gmail.com"
 
-COPY src/docker/docker-entrypoint.sh /
+COPY gateway/src/docker/docker-entrypoint.sh /
 
-COPY --from=builder /code/build/libs/gateway-1.0.0-SNAPSHOT.jar /gateway-1.0.0-SNAPSHOT.jar
+COPY --from=builder /code/gateway/build/libs/gateway-1.0.0-SNAPSHOT.jar /gateway-1.0.0-SNAPSHOT.jar
 
 RUN chmod +x /*.sh
 
