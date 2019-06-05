@@ -4,18 +4,15 @@ import io.picos.sailfish.gateway.auth.AuthzService;
 import io.picos.sailfish.gateway.auth.IamService;
 import io.picos.sailfish.gateway.exception.AuthzFailureException;
 import io.picos.sailfish.gateway.exception.HasNoPermissionException;
-import io.picos.sailfish.gateway.impl.cache.CacheConstants;
 import io.picos.sailfish.gateway.model.ApiPermission;
 import io.picos.sailfish.gateway.model.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +25,6 @@ import java.util.List;
 public class AuthzServiceImpl implements AuthzService {
 
     private static final Log logger = LogFactory.getLog(AuthzServiceImpl.class);
-
 
     @Autowired
     private IamService iamService;

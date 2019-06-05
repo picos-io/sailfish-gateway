@@ -42,7 +42,7 @@ services:
     container_name: helloworld
     image: clouthinkin/helloworld:eureka
     depends_on:
-      - registry
+      - eureka
     ports:
       - "8888:80"
     environment:
@@ -71,7 +71,7 @@ services:
       - redis
       - mongodb
     ports:
-      - "8888:80"
+      - "8081:80"
     environment:
       MONGODB_URI: "mongodb://mongodb:27017/sailfish"
       REDIS_HOST: redis
@@ -96,5 +96,5 @@ services:
 #      MONGODB_URI: "mongodb://mongodb:27017/sailfish"
 #      REDIS_HOST: redis
 #      REDIS_PORT: 6379
-#      EUREKA_DEFAULT_SERVICE_URL: http://registry:8761/eureka/
+#      EUREKA_DEFAULT_SERVICE_URL: http://eureka:8761/eureka/
 #      GRADLE_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8191"
