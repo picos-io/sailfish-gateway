@@ -6,10 +6,8 @@ import io.picos.sailfish.gateway.auth.ApplicationService;
 import io.picos.sailfish.gateway.auth.AuthzService;
 import io.picos.sailfish.gateway.exception.ApplicationDisabledException;
 import io.picos.sailfish.gateway.exception.ApplicationNotFoundException;
-import io.picos.sailfish.gateway.exception.AuthorizationHeaderRequiredException;
 import io.picos.sailfish.gateway.model.Application;
 import io.picos.sailfish.gateway.model.Header;
-import io.picos.sailfish.gateway.model.User;
 import io.picos.sailfish.gateway.support.GatewayProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -17,6 +15,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -48,11 +49,8 @@ public class GatewayZuulFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        final String uri = ctx.getRequest().getRequestURI();
-
-        //ignore spring boot actuator
-        return !(uri.startsWith("/health") || uri.startsWith("/info"));
+        return SecurityContextHolder.getContext() != null &&
+            SecurityContextHolder.getContext().getAuthentication() != null;
     }
 
     @Override
@@ -60,56 +58,33 @@ public class GatewayZuulFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         final String requestUri = ctx.getRequest().getRequestURI();
         final String requestMethod = ctx.getRequest().getMethod();
+        final Application application = requestedApplication(requestUri);
+        final String applicationCode = application.getCode();
+        final UserDetails user = currentUser();
 
-        //resolveApplication
-        final String applicationCode = StringUtils.split(requestUri, "/")[0];
-        Application application = applicationService.findByCode(applicationCode);
-        if (application == null) {
-            throw new ApplicationNotFoundException(String.format("Unsupported application '%s'", applicationCode));
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Receiving user = %s, application = %s, operation = %s , uri = %s",
+                                       user.getUsername(),
+                                       applicationCode,
+                                       requestMethod,
+                                       requestUri));
         }
-
-        if (!application.isEnabled()) {
-            throw new ApplicationDisabledException(String.format("The application '%s' is disabled", applicationCode));
-        }
-
-        String authorizationHeader = ctx.getRequest().getHeader("Authorization");
-        //always forward the authorization header
-        ctx.addZuulRequestHeader("Authorization", authorizationHeader);
-
-        if (authorizationHeader == null || authorizationHeader.trim().length() == 0) {
-            logger.warn("Gateway: Authorization header is missing");
-            throw new AuthorizationHeaderRequiredException(
-                "OAuth2 Token not present in the request header with Authorization");
-        }
-
-        final String accessToken = authorizationHeader.substring(authorizationHeader.lastIndexOf(" ") + 1);
 
         try {
-            final User user = authzService.authorize(accessToken, applicationCode, requestMethod, requestUri);
+            authzService.authorize(user, applicationCode, requestMethod, requestUri);
             ctx.setSendZuulResponse(true);
-
-            try {
-                final String userId = URLEncoder.encode(user.getId(), "UTF-8");
-                final String headerKey = getXForwardedUserid(application);
-                ctx.addZuulRequestHeader(headerKey, userId);
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("Zuul adding request HEADER: %s=%s ",
-                                               headerKey,
-                                               userId));
-                }
-            } catch (UnsupportedEncodingException e) {
-                logger.warn(e.toString());
-            }
 
             try {
                 String username = URLEncoder.encode(user.getUsername(), "UTF-8");
                 final String headerKey = getXForwardedUsername(application);
                 ctx.addZuulRequestHeader(headerKey, username);
+
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("Zuul adding request HEADER: %s=%s ",
+                    logger.debug(String.format("Gateway adding request HEADER: %s=%s ",
                                                headerKey,
                                                username));
                 }
+
             } catch (UnsupportedEncodingException e) {
                 logger.warn(e.toString());
             }
@@ -119,7 +94,7 @@ public class GatewayZuulFilter extends ZuulFilter {
             }
 
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Authorized: user = %s, application = %s, operation = %s , uri = %s",
+                logger.debug(String.format("Authorized user = %s, application = %s, operation = %s , uri = %s",
                                            user.getUsername(),
                                            applicationCode,
                                            requestMethod,
@@ -127,8 +102,9 @@ public class GatewayZuulFilter extends ZuulFilter {
             }
 
         } catch (Throwable e) {
-            logger.error(String.format("Authorizing [token=%s, method=%s, requestUri=%s] goes failure, the reason is %s",
-                                       accessToken,
+            String authorizationHeader = ctx.getRequest().getHeader("Authorization");
+            logger.error(String.format("Authorization[%s] & Request[%s %s] goes failure, the reason is %s",
+                                       authorizationHeader,
                                        requestMethod,
                                        requestUri,
                                        e.getMessage()), e);
@@ -149,16 +125,24 @@ public class GatewayZuulFilter extends ZuulFilter {
         return null;
     }
 
-    private String getXForwardedUserid(Application application) {
-        Header header = application.getHeader();
-        if (header == null) {
-            return gatewayProperties.getHttpHeaderUserId();
+    private UserDetails currentUser() {
+        OAuth2Authentication authentication = (OAuth2Authentication) SecurityContextHolder.getContext()
+                                                                                          .getAuthentication();
+        return (UserDetails) authentication.getUserAuthentication().getPrincipal();
+    }
+
+    private Application requestedApplication(String requestUri) {
+        final String applicationCode = StringUtils.split(requestUri, "/")[0];
+        Application application = applicationService.findByCode(applicationCode);
+        if (application == null) {
+            throw new ApplicationNotFoundException(String.format("Unsupported application '%s'", applicationCode));
         }
-        String userIdKey = header.getUserIdKey();
-        if (StringUtils.isEmpty(userIdKey)) {
-            return gatewayProperties.getHttpHeaderUserId();
+
+        if (!application.isEnabled()) {
+            throw new ApplicationDisabledException(String.format("The application '%s' is disabled", applicationCode));
         }
-        return userIdKey;
+
+        return application;
     }
 
     private String getXForwardedUsername(Application application) {

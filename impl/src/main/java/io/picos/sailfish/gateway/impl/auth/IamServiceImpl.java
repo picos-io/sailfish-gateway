@@ -30,11 +30,6 @@ public class IamServiceImpl implements IamService {
     private ApiPermissionRepository apiPermissionRepository;
 
     @Override
-    public User findUserByName(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
     @Cacheable(value = CacheConstants.USER_CACHE, key = "#username + '_'+ #application")
     public List<ApiPermission> getUserPermissions(String username, String application) {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(application)) {

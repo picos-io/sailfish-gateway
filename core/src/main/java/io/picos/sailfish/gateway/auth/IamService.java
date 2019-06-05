@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface IamService {
 
-    User findUserByName(String username);
-
+    /**
+     * @param username
+     * @param application
+     * @return the permission list filter by username & application code
+     */
     List<ApiPermission> getUserPermissions(String username, String application);
 
 }

@@ -1,6 +1,7 @@
 package io.picos.sailfish.gateway.config;
 
 import io.picos.sailfish.gateway.impl.support.DefaultGatewayProperties;
+import io.picos.sailfish.gateway.impl.support.TokenStoreTokenServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 @Configuration
-//@EnableResourceServer
+@EnableResourceServer
 public class ResourceServerConfigurer extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -31,10 +32,8 @@ public class ResourceServerConfigurer extends ResourceServerConfigurerAdapter {
 
     @Bean
     public ResourceServerTokenServices tokenService() {
-        RemoteTokenServices tokenServices = new RemoteTokenServices();
-        tokenServices.setClientId(gatewayProperties.getOauth2ClientId());
-        tokenServices.setClientSecret(gatewayProperties.getOauth2ClientSecret());
-        tokenServices.setCheckTokenEndpointUrl(gatewayProperties.getOauth2CheckTokenUrl());
+        TokenStoreTokenServices tokenServices = new TokenStoreTokenServices();
+        tokenServices.setTokenStore(tokenStore());
         return tokenServices;
     }
 
@@ -50,7 +49,7 @@ public class ResourceServerConfigurer extends ResourceServerConfigurerAdapter {
             .antMatchers("/**")
             .and()
             .authorizeRequests()
-            .antMatchers("/", "/info", "/health") //actuator
+            .antMatchers("/", "/info", "/health", "/favicon.ico") //actuator
             .permitAll()
             .anyRequest()
             .authenticated();

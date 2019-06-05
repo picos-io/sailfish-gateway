@@ -1,18 +1,19 @@
 package io.picos.sailfish.gateway.auth;
 
-import io.picos.sailfish.gateway.model.User;
+import io.picos.sailfish.gateway.exception.HasNoPermissionException;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AuthzService {
 
     /**
-     * Check the permission of specified token, if passed, the authorized user is returned
+     * Check the permission of specified user, if not passed, the HasNoPermissionException is thrown
      *
-     * @param token
+     * @param user
      * @param application
      * @param httpMethod
      * @param requestUri
-     * @return
+     * @throws HasNoPermissionException if has no permission
      */
-    User authorize(String token, String application, String httpMethod, String requestUri);
+    void authorize(UserDetails user, String application, String httpMethod, String requestUri);
 
 }
