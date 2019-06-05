@@ -6,7 +6,7 @@ server:
 
 info:
   app:
-    name: ${spring.application.name}
+    name: gateway
     version: ${GATEWAY_VERSION:unknown}
 
 security:
